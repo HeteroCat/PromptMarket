@@ -1,57 +1,123 @@
-# React + TypeScript + Vite
+# PromptMarket
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个现代化的AI提示词市场平台，用户可以浏览、搜索、收藏和分享各种AI提示词模板。
 
-Currently, two official plugins are available:
+## 🚀 功能特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **提示词浏览**: 按分类浏览各种AI提示词模板
+- **智能搜索**: 快速搜索和筛选提示词
+- **用户系统**: 用户注册、登录和个人资料管理
+- **收藏功能**: 收藏喜欢的提示词模板
+- **分类管理**: 支持多种分类（电商、教育、金融、图像、视频等）
+- **响应式设计**: 适配各种设备屏幕
+- **现代UI**: 使用Tailwind CSS和Framer Motion打造流畅体验
 
-## Expanding the ESLint configuration
+## 🛠️ 技术栈
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 前端
+- **React 18** - 用户界面框架
+- **TypeScript** - 类型安全的JavaScript
+- **Vite** - 快速构建工具
+- **Tailwind CSS** - 实用优先的CSS框架
+- **Framer Motion** - 动画库
+- **React Router** - 路由管理
+- **Zustand** - 状态管理
+- **Lucide React** - 图标库
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 后端
+- **Node.js** - 运行时环境
+- **Express** - Web框架
+- **TypeScript** - 类型安全
+
+### 开发工具
+- **ESLint** - 代码质量检查
+- **PostCSS** - CSS处理工具
+- **Nodemon** - 开发时自动重启
+- **Concurrently** - 并行运行脚本
+
+## 📦 安装和运行
+
+### 环境要求
+- Node.js >= 16
+- npm 或 yarn
+
+### 安装依赖
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  extends: [
-    // other configs...
-    // Enable lint rules for React
-    reactX.configs['recommended-typescript'],
-    // Enable lint rules for React DOM
-    reactDom.configs.recommended,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 开发模式
+```bash
+npm run dev
 ```
+这将同时启动前端开发服务器和后端API服务器。
+
+### 其他脚本
+```bash
+# 仅启动前端开发服务器
+npm run client:dev
+
+# 仅启动后端开发服务器
+npm run server:dev
+
+# 构建生产版本
+npm run build
+
+# 预览构建结果
+npm run preview
+
+# 代码检查
+npm run lint
+
+# 类型检查
+npm run check
+```
+
+## 🏗️ 项目结构
+
+```
+├── src/                    # 前端源代码
+│   ├── components/         # React组件
+│   ├── pages/             # 页面组件
+│   ├── contexts/          # React Context
+│   ├── hooks/             # 自定义Hooks
+│   ├── lib/               # 工具库
+│   └── assets/            # 静态资源
+├── api/                   # 后端API
+│   ├── routes/            # 路由定义
+│   └── server.ts          # 服务器入口
+├── public/                # 公共静态文件
+└── dist/                  # 构建输出目录
+```
+
+## 🌐 部署
+
+项目已配置Vercel部署，包含：
+- 前端静态文件部署
+- Serverless API函数
+- 自动构建和部署
+
+## 📝 开发说明
+
+### 添加新页面
+1. 在 `src/pages/` 目录下创建新的页面组件
+2. 在路由配置中添加对应路由
+3. 更新导航菜单（如需要）
+
+### 添加新组件
+1. 在 `src/components/` 目录下创建组件
+2. 遵循现有的命名和结构约定
+3. 添加适当的TypeScript类型定义
+
+### 样式指南
+- 使用Tailwind CSS类名进行样式设计
+- 保持响应式设计原则
+- 使用一致的颜色和间距系统
+
+## 🤝 贡献
+
+欢迎提交Issue和Pull Request来改进项目！
+
+## 📄 许可证
+
+MIT License
