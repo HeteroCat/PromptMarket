@@ -1,7 +1,61 @@
+# Dependencies
 node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
 build
 dist
-.git
+.next
+.nuxt
+.vite
+
+# Development files
 .trae
-.log
-.figma
+.vscode
+.idea
+*.log
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Sensitive files
+supabase/
+.supabase/
+*.sql
+debug_prompts.sql
+config/
+secrets/
+keys/
+
+# Version control
+.git
+.gitignore
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+
+# Testing
+coverage/
+.nyc_output
+
+# Documentation
+*.md
+docs/
+
+# Design files
+*.figma
+*.sketch

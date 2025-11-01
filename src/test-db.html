@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据库测试</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>数据库连接测试</h1>
+    <div id="results"></div>
+    
+    <script>
+        const supabaseUrl = 'https://ppihakeiwovmulcywqkl.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwaWhha2Vpd292bXVsY3l3cWtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0NjMwNzMsImV4cCI6MjA2NTAzOTA3M30.v_IjBHvUDVVh-S2J2zqSRX9AEIEgdh0W2rprais2JmU';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        async function testDatabase() {
+            const results = document.getElementById('results');
+            
+            try {
+                // 测试查询prompts表
+                console.log('Testing prompts table...');
+                const { data: prompts, error: promptsError } = await supabase
+                    .from('prompts')
+                    .select('*')
+                    .limit(5);
+                
+                if (promptsError) {
+                    console.error('Prompts error:', promptsError);
+                    results.innerHTML += `<p>Prompts查询错误: ${promptsError.message}</p>`;
+                } else {
+                    console.log('Prompts data:', prompts);
+                    results.innerHTML += `<p>Prompts表查询成功，找到 ${prompts.length} 条记录</p>`;
+                }
+                
+                // 测试查询favorites表
+                console.log('Testing favorites table...');
+                const { data: favorites, error: favoritesError } = await supabase
+                    .from('favorites')
+                    .select('*')
+                    .limit(5);
+                
+                if (favoritesError) {
+                    console.error('Favorites error:', favoritesError);
+                    results.innerHTML += `<p>Favorites查询错误: ${favoritesError.message}</p>`;
+                } else {
+                    console.log('Favorites data:', favorites);
+                    results.innerHTML += `<p>Favorites表查询成功，找到 ${favorites.length} 条记录</p>`;
+                }
+                
+                // 测试查询custom_users表
+                console.log('Testing custom_users table...');
+                const { data: users, error: usersError } = await supabase
+                    .from('custom_users')
+                    .select('*')
+                    .limit(5);
+                
+                if (usersError) {
+                    console.error('Users error:', usersError);
+                    results.innerHTML += `<p>Custom_users查询错误: ${usersError.message}</p>`;
+                } else {
+                    console.log('Users data:', users);
+                    results.innerHTML += `<p>Custom_users表查询成功，找到 ${users.length} 条记录</p>`;
+                }
+                
+            } catch (error) {
+                console.error('General error:', error);
+                results.innerHTML += `<p>一般错误: ${error.message}</p>`;
+            }
+        }
+        
+        // 页面加载后运行测试
+        window.addEventListener('load', testDatabase);
+    </script>
+</body>
+</html>
