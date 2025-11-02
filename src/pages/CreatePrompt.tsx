@@ -20,10 +20,12 @@ const CreatePrompt: React.FC = () => {
     title: '',
     description: '',
     content: '',
-    category: 'ecommerce',
+    category: 'ecommerce' as 'ecommerce' | 'education' | 'finance' | 'image' | 'video',
     tags: [] as string[],
     usage_instructions: '',
-    example_output: ''
+    example_output: '',
+    is_public: true,
+    is_featured: false
   });
   const [newTag, setNewTag] = useState('');
 
@@ -35,12 +37,14 @@ const CreatePrompt: React.FC = () => {
         if (prompt) {
           setFormData({
             title: prompt.title,
-            description: prompt.description,
+            description: prompt.description || '',
             content: prompt.content,
             category: prompt.category,
-            tags: prompt.tags || [],
+            tags: [], // prompt.tags || [], // 暂时设为空数组，因为数据库结构可能不同
             usage_instructions: prompt.usage_instructions || '',
-            example_output: prompt.example_output || ''
+            example_output: prompt.example_output || '',
+            is_public: prompt.is_public,
+            is_featured: prompt.is_featured
           });
         }
       });

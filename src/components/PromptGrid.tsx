@@ -1,5 +1,5 @@
 import React from 'react';
-import { Prompt } from '../contexts/PromptContext';
+import { Prompt } from '../lib/supabase';
 import TiltedCard from './TiltedCard';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
