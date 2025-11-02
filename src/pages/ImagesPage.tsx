@@ -15,12 +15,12 @@ const ImagesPage: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchPrompts('images');
+    fetchPrompts('image');
   }, [fetchPrompts]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchPrompts('images', searchQuery.trim() || undefined);
+    fetchPrompts('image', searchQuery.trim() || undefined);
   };
 
   const handleFilterChange = (key: string, value: string) => {
@@ -75,7 +75,7 @@ const ImagesPage: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="搜索图片提示词..."
-                  className="w-full pl-12 pr-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <button
                   type="submit"

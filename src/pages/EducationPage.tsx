@@ -6,11 +6,11 @@ import SearchBar, { SearchFilters } from '../components/SearchBar';
 import { usePrompts } from '../contexts/PromptContext';
 
 const EducationPage: React.FC = () => {
-  const { prompts, loading, searchPrompts, fetchPrompts } = usePrompts();
+  const { prompts, loading, searchPrompts, fetchPrompts, fetchFeaturedPromptsByCategory } = usePrompts();
 
   useEffect(() => {
-    fetchPrompts('education');
-  }, [fetchPrompts]);
+    fetchFeaturedPromptsByCategory('education');
+  }, [fetchFeaturedPromptsByCategory]);
 
   const handleSearch = (query: string, filters: SearchFilters) => {
     const searchFilters = {
@@ -21,7 +21,7 @@ const EducationPage: React.FC = () => {
     if (query.trim() || Object.values(filters).some(v => v && v !== '')) {
       searchPrompts(query, searchFilters);
     } else {
-      fetchPrompts('education');
+      fetchFeaturedPromptsByCategory('education');
     }
   };
 

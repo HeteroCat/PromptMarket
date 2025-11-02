@@ -94,11 +94,18 @@ const CreatePrompt: React.FC = () => {
     }
 
     try {
+      let result;
       if (editId) {
-        await updatePrompt(editId, formData);
+        result = await updatePrompt(editId, formData);
+        if (result.error) {
+          throw result.error;
+        }
         showSuccess('更新成功', '提示词已成功更新');
       } else {
-        await createPrompt(formData);
+        result = await createPrompt(formData);
+        if (result.error) {
+          throw result.error;
+        }
         showSuccess('创建成功', '提示词已成功创建');
       }
       navigate('/profile');
@@ -134,8 +141,8 @@ const CreatePrompt: React.FC = () => {
     { value: 'ecommerce', label: '电商' },
     { value: 'education', label: '教育' },
     { value: 'finance', label: '金融' },
-    { value: 'images', label: '图片' },
-    { value: 'videos', label: '视频' }
+    { value: 'image', label: '图片' },
+    { value: 'video', label: '视频' }
   ];
 
   return (

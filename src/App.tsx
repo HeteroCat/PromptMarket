@@ -15,7 +15,6 @@ import Register from "@/pages/Register";
 import Profile from "@/pages/Profile";
 import PromptDetail from "@/pages/PromptDetail";
 import CreatePrompt from "@/pages/CreatePrompt";
-import Favorites from "@/pages/Favorites";
 
 export default function App() {
   return (
@@ -36,7 +35,6 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/prompt/:id" element={<PromptDetail />} />
             <Route path="/create" element={<CreatePrompt />} />
-            <Route path="/favorites" element={<Favorites />} />
           </Routes>
             </ToastProvider>
           </PromptProvider>

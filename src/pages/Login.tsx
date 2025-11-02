@@ -4,6 +4,7 @@ import { Eye, EyeOff, Phone, Lock, LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/Layout';
 import { useToast } from '../components/ToastContainer';
+import Ballpit from '../components/Ballpit';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -62,10 +63,22 @@ const Login: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Ballpit 背景 */}
+        <div className="absolute inset-0 z-0">
+          <Ballpit 
+            count={100}
+            gravity={0.1}
+            friction={0.985}
+            wallBounce={0.95}
+           
+            colors={[0xffffff, 0x9ca3af, 0x8b5cf6, 0x3b82f6]}
+          />
+        </div>
+        {/* 登录表单 */}
+        <div className="max-w-md w-full space-y-8 relative z-20">
           <div>
-            <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500">
+            <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
               <LogIn className="h-6 w-6 text-white" />
             </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
@@ -89,8 +102,8 @@ const Login: React.FC = () => {
                   手机号码
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone className="h-5 w-5 text-gray-400" />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-20">
+                    <Phone className="h-5 w-5 text-gray-300" />
                   </div>
                   <input
                     id="phone"
@@ -98,7 +111,7 @@ const Login: React.FC = () => {
                     type="tel"
                     autoComplete="tel"
                     required
-                    className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-600 placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:z-10 sm:text-sm"
+                    className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-600 placeholder-gray-400 text-white bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:z-10 sm:text-sm"
                     placeholder="手机号码"
                     value={formData.phone}
                     onChange={handleChange}
@@ -112,8 +125,8 @@ const Login: React.FC = () => {
                   密码
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-20">
+                    <Lock className="h-5 w-5 text-gray-300" />
                   </div>
                   <input
                     id="password"
@@ -121,7 +134,7 @@ const Login: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     required
-                    className="appearance-none relative block w-full px-3 py-3 pl-10 pr-10 border border-gray-600 placeholder-gray-400 text-white bg-gray-800/50 backdrop-blur-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:z-10 sm:text-sm"
+                    className="appearance-none relative block w-full px-3 py-3 pl-10 pr-10 border border-gray-600 placeholder-gray-400 text-white bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:z-10 sm:text-sm"
                     placeholder="密码"
                     value={formData.password}
                     onChange={handleChange}
@@ -171,7 +184,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 {loading ? (
                   <div className="flex items-center">

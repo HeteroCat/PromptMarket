@@ -15,9 +15,10 @@ interface PromptContextType {
   // 提示词相关方法
   fetchPrompts: (category?: string, search?: string, limit?: number) => Promise<void>;
   fetchFeaturedPrompts: (limit?: number) => Promise<void>;
+  fetchFeaturedPromptsByCategory: (category: string, limit?: number) => Promise<void>;
   fetchPromptById: (id: string) => Promise<Prompt | null>;
   createPrompt: (prompt: Omit<Prompt, 'id' | 'author_id' | 'created_at' | 'updated_at' | 'usage_count' | 'like_count'> & { tags?: string[] }) => Promise<{ error: any }>;
-  updatePrompt: (id: string, updates: Partial<Prompt>) => Promise<{ error: any }>;
+  updatePrompt: (id: string, updates: Partial<Prompt> & { tags?: string[] }) => Promise<{ error: any }>;
   deletePrompt: (id: string) => Promise<{ error: any }>;
   
   // 搜索和筛选方法
@@ -154,6 +155,36 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, []);
 
+  const fetchFeaturedPromptsByCategory = useCallback(async (category: string, limit?: number) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      let query = supabase
+        .from('prompts')
+        .select('*')
+        .eq('is_public', true)
+        .eq('is_featured', true)
+        .eq('category', category)
+        .order('created_at', { ascending: false });
+
+      if (limit) {
+        query = query.limit(limit);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      setPrompts(data || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Error fetching featured prompts by category:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const fetchPromptById = useCallback(async (id: string): Promise<Prompt | null> => {
     try {
       const { data, error } = await supabase
@@ -250,19 +281,65 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [user]);
 
-  const updatePrompt = useCallback(async (id: string, updates: Partial<Prompt>) => {
+  const updatePrompt = useCallback(async (id: string, updates: Partial<Prompt> & { tags?: string[] }) => {
     try {
+      // 从updates中提取tags，其余字段用于更新prompts表
+      const { tags, ...promptUpdates } = updates;
+
       const { data, error } = await supabase
         .from('prompts')
-        .update(updates)
+        .update(promptUpdates)
         .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
 
+      // 如果有标签更新，处理标签关联
+      if (tags !== undefined) {
+        console.log('🏷️ Updating tags for prompt:', id, tags);
+        
+        // 首先删除现有的标签关联
+        await supabase
+          .from('prompt_tags')
+          .delete()
+          .eq('prompt_id', id);
+
+        // 如果有新标签，添加标签关联
+        if (tags && tags.length > 0) {
+          for (const tagName of tags) {
+            // 检查标签是否已存在
+            const { data: existingTag } = await supabase
+              .from('tags')
+              .select('id')
+              .eq('name', tagName)
+              .single();
+
+            let tagId = existingTag?.id;
+
+            // 如果标签不存在，创建新标签
+            if (!tagId) {
+              const { data: newTag, error: tagError } = await supabase
+                .from('tags')
+                .insert([{ name: tagName }])
+                .select()
+                .single();
+
+              if (tagError) throw tagError;
+              tagId = newTag.id;
+            }
+
+            // 插入到prompt_tags关联表
+            await supabase
+              .from('prompt_tags')
+              .insert([{ prompt_id: id, tag_id: tagId }]);
+          }
+        }
+      }
+
       // 更新本地状态
       setPrompts(prev => prev.map(p => p.id === id ? data : p));
+      setUserPrompts(prev => prev.map(p => p.id === id ? data : p));
 
       return { error: null };
     } catch (error) {
@@ -525,6 +602,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     error,
     fetchPrompts,
     fetchFeaturedPrompts,
+    fetchFeaturedPromptsByCategory,
     fetchPromptById,
     createPrompt,
     updatePrompt,

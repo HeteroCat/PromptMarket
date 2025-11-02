@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { User, Edit3, Heart, FileText, Calendar, Mail, Settings } from 'lucide-react';
+import { User, Edit3, Heart, FileText, Calendar, Phone, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import PromptGrid from '../components/PromptGrid';
@@ -157,7 +157,7 @@ const Profile: React.FC = () => {
                   </p>
                   <div className="flex items-center gap-6 text-sm text-gray-400">
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
+                      <Phone className="w-4 h-4" />
                       <span>{user.phone}</span>
                     </div>
                     <div className="flex items-center gap-2">

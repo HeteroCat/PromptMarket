@@ -15,12 +15,12 @@ const VideosPage: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchPrompts('videos');
+    fetchPrompts('video');
   }, [fetchPrompts]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchPrompts('videos', searchQuery.trim() || undefined);
+    fetchPrompts('video', searchQuery.trim() || undefined);
   };
 
   const handleFilterChange = (key: string, value: string) => {
@@ -75,7 +75,7 @@ const VideosPage: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="搜索视频提示词..."
-                  className="w-full pl-12 pr-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
                 <button
                   type="submit"

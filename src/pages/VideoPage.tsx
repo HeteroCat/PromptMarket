@@ -6,11 +6,11 @@ import SearchBar, { SearchFilters } from '../components/SearchBar';
 import { usePrompts } from '../contexts/PromptContext';
 
 const VideoPage: React.FC = () => {
-  const { prompts, loading, searchPrompts, fetchPrompts } = usePrompts();
+  const { prompts, loading, searchPrompts, fetchPrompts, fetchFeaturedPromptsByCategory } = usePrompts();
 
   useEffect(() => {
-    fetchPrompts('video');
-  }, [fetchPrompts]);
+    fetchFeaturedPromptsByCategory('video');
+  }, [fetchFeaturedPromptsByCategory]);
 
   const handleSearch = (query: string, filters: SearchFilters) => {
     const searchFilters = {
@@ -21,7 +21,7 @@ const VideoPage: React.FC = () => {
     if (query.trim() || Object.values(filters).some(v => v && v !== '')) {
       searchPrompts(query, searchFilters);
     } else {
-      fetchPrompts('video');
+      fetchFeaturedPromptsByCategory('video');
     }
   };
 

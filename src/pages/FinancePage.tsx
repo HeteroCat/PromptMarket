@@ -6,11 +6,11 @@ import SearchBar, { SearchFilters } from '../components/SearchBar';
 import { usePrompts } from '../contexts/PromptContext';
 
 const FinancePage: React.FC = () => {
-  const { prompts, loading, searchPrompts, fetchPrompts } = usePrompts();
+  const { prompts, loading, searchPrompts, fetchPrompts, fetchFeaturedPromptsByCategory } = usePrompts();
 
   useEffect(() => {
-    fetchPrompts('finance');
-  }, [fetchPrompts]);
+    fetchFeaturedPromptsByCategory('finance');
+  }, [fetchFeaturedPromptsByCategory]);
 
   const handleSearch = (query: string, filters: SearchFilters) => {
     const searchFilters = {
@@ -21,7 +21,7 @@ const FinancePage: React.FC = () => {
     if (query.trim() || Object.values(filters).some(v => v && v !== '')) {
       searchPrompts(query, searchFilters);
     } else {
-      fetchPrompts('finance');
+      fetchFeaturedPromptsByCategory('finance');
     }
   };
 

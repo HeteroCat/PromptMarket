@@ -6,11 +6,11 @@ import SearchBar, { SearchFilters } from '../components/SearchBar';
 import { usePrompts } from '../contexts/PromptContext';
 
 const EcommercePage: React.FC = () => {
-  const { prompts, loading, error, searchPrompts, fetchPrompts } = usePrompts();
+  const { prompts, loading, error, searchPrompts, fetchPrompts, fetchFeaturedPromptsByCategory } = usePrompts();
 
   useEffect(() => {
-    fetchPrompts('ecommerce');
-  }, [fetchPrompts]);
+    fetchFeaturedPromptsByCategory('ecommerce');
+  }, [fetchFeaturedPromptsByCategory]);
 
   const handleSearch = (query: string, filters: SearchFilters) => {
     const searchFilters = {
@@ -21,7 +21,7 @@ const EcommercePage: React.FC = () => {
     if (query.trim() || Object.values(filters).some(v => v && v !== '')) {
       searchPrompts(query, searchFilters);
     } else {
-      fetchPrompts('ecommerce');
+      fetchFeaturedPromptsByCategory('ecommerce');
     }
   };
 

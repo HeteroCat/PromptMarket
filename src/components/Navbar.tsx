@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User, LogOut, Menu, X, Heart, Plus } from 'lucide-react';
+import { User, LogOut, Menu, X, Plus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar: React.FC = () => {
@@ -75,13 +75,7 @@ const Navbar: React.FC = () => {
                 >
                   <User className="w-5 h-5" />
                 </Link>
-                <Link
-                  to="/favorites"
-                  className="p-2 text-gray-300 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-sm hover:shadow-red-500/20"
-                  title="我的收藏"
-                >
-                  <Heart className="w-5 h-5" />
-                </Link>
+
                 <Link
                   to="/create"
                   className="p-2 text-gray-300 hover:text-green-400 hover:bg-green-400/10 rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-sm hover:shadow-green-500/20"

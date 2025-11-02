@@ -87,6 +87,8 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
       finance: 'from-yellow-500 to-orange-600',
       images: 'from-purple-500 to-pink-600',
       videos: 'from-red-500 to-rose-600',
+      image: 'from-purple-500 to-pink-600',
+      video: 'from-red-500 to-rose-600',
     };
     return colors[category as keyof typeof colors] || 'from-gray-500 to-gray-600';
   };
@@ -98,6 +100,8 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
       finance: '金融',
       images: '图片',
       videos: '视频',
+      image: '图片',
+      video: '视频',
     };
     return labels[category as keyof typeof labels] || category;
   };
@@ -106,7 +110,7 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
     <div className={`tilt-card ${className}`}>
       <Link
       to={`/prompt/${prompt.id}`}
-      className="group block bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-500 hover:shadow-xl hover:shadow-blue-500/20 transform hover:-translate-y-2 hover:scale-105 relative overflow-hidden"
+      className="group block bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-500 hover:shadow-xl hover:shadow-blue-500/20 relative overflow-hidden"
     >
       {/* 背景光效 */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -116,7 +120,7 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r ${getCategoryColor(prompt.category)} text-white group-hover:shadow-sm group-hover:shadow-blue-500/20 transition-all duration-300`}>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r ${getCategoryColor(prompt.category)} text-white transition-all duration-300`}>
                   {getCategoryLabel(prompt.category)}
                 </span>
                 {prompt.like_count > 0 && (
@@ -126,7 +130,7 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
                   </div>
                 )}
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-300 transition-all duration-300 line-clamp-2 group-hover:transform group-hover:translate-x-1">
+              <h3 className="text-lg font-semibold text-white mb-2 transition-all duration-300 line-clamp-2">
                 {prompt.title}
               </h3>
             </div>
@@ -147,14 +151,14 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
               {user && (
                 <button
               onClick={handleFavoriteClick}
-              className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${
+              className={`p-2 rounded-lg transition-all duration-300 ${
                 isFavorited(prompt.id)
                   ? 'text-red-400 hover:text-red-300 bg-red-400/10'
                   : 'text-gray-400 hover:text-red-400 hover:bg-red-400/10'
               }`}
               title={isFavorited(prompt.id) ? '取消收藏' : '收藏'}
             >
-              <Heart className={`w-4 h-4 transition-all duration-300 ${isFavorited(prompt.id) ? 'fill-current scale-110' : ''}`} />
+              <Heart className={`w-4 h-4 transition-all duration-300 ${isFavorited(prompt.id) ? 'fill-current' : ''}`} />
             </button>
               )}
             </div>
@@ -162,31 +166,31 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
 
           {/* Description */}
           {prompt.description && (
-            <p className="text-gray-300 text-sm mb-4 line-clamp-3 group-hover:text-gray-200 transition-colors duration-300">
+            <p className="text-gray-300 text-sm mb-4 line-clamp-3 transition-colors duration-300">
               {prompt.description}
             </p>
           )}
 
           {/* Content Preview */}
-          <div className="bg-gray-900/50 rounded-lg p-3 mb-4">
+          <div className="mb-4">
             <p className="text-gray-400 text-sm line-clamp-3 font-mono">
               {prompt.content}
             </p>
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-700/50 group-hover:border-gray-600/50 transition-colors duration-300">
+          <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-700/50 transition-colors duration-300">
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1 group-hover:text-blue-400 transition-colors duration-300">
+              <span className="flex items-center gap-1 transition-colors duration-300">
                 <Eye className="w-3 h-3" />
                 {prompt.usage_count || 0}
               </span>
-              <span className="flex items-center gap-1 group-hover:text-red-400 transition-colors duration-300">
+              <span className="flex items-center gap-1 transition-colors duration-300">
                 <Heart className="w-3 h-3" />
                 {prompt.like_count || 0}
               </span>
             </div>
-            <span className="group-hover:text-gray-300 transition-colors duration-300">{formatDate(prompt.created_at)}</span>
+            <span className="transition-colors duration-300">{formatDate(prompt.created_at)}</span>
           </div>
 
           {/* Hover Effect Overlay */}

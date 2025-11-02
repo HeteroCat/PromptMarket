@@ -60,7 +60,7 @@ const Home: React.FC = () => {
       path: '/finance'
     },
     {
-      id: 'images',
+      id: 'image',
       name: '图片',
       description: '图像生成、视觉设计、艺术创作',
       icon: Image,
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
       path: '/images'
     },
     {
-      id: 'videos',
+      id: 'video',
       name: '视频',
       description: '视频脚本、故事板、动画创意',
       icon: Video,
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
           </p>
           
           <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
-            为创作者、营销人员、教育工作者提供专业的提示词资源，提升AI使用效率和创作质量
+            为电商、金融、教育工作者提供专业的提示词资源，提升AI使用效率和创作质量
           </p>
 
           {/* Search Bar */}
