@@ -872,7 +872,7 @@ const Ballpit: React.FC<BallpitProps> = ({ className = '', followCursor = false,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <canvas className={className} ref={canvasRef} style={{ width: '100%', height: '100%' }} />;
+  return <canvas className={className} ref={canvasRef} style={{ width: '100%', height: '100%', pointerEvents: 'none' }} />;
 };
 
 export default Ballpit;
