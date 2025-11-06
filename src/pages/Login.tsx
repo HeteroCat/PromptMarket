@@ -65,7 +65,7 @@ const Login: React.FC = () => {
     <Layout>
       <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Ballpit 背景 */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 z-0">
           <Ballpit 
             count={100}
             gravity={0.1}
@@ -73,6 +73,7 @@ const Login: React.FC = () => {
             wallBounce={0.95}
            
             colors={[0xffffff, 0x9ca3af, 0x8b5cf6, 0x3b82f6]}
+            interactive={true}
           />
         </div>
         {/* 登录表单 */}

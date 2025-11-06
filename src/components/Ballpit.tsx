@@ -520,6 +520,14 @@ interface PointerData {
 
 const pointerMap = new Map<HTMLElement, PointerData>();
 
+/**
+ * createPointerData
+ * 为指定的 DOM 元素（通常是 Ballpit 的 canvas）绑定指针/触摸事件，
+ * 并在内部维护位置、悬停与触摸状态。仅在元素上绑定事件，避免影响页面其它表单交互。
+ * 参数: options.domElement 目标元素，及若干回调
+ * 返回值: PointerData（包含位置、状态与释放方法）
+ * 异常: 无
+ */
 function createPointerData(options: Partial<PointerData> & { domElement: HTMLElement }): PointerData {
   const defaultData: PointerData = {
     position: new Vector2(),
@@ -534,31 +542,28 @@ function createPointerData(options: Partial<PointerData> & { domElement: HTMLEle
   };
   if (!pointerMap.has(options.domElement)) {
     pointerMap.set(options.domElement, defaultData);
-    if (!globalPointerActive) {
-      document.body.addEventListener('pointermove', onPointerMove as EventListener);
-      document.body.addEventListener('pointerleave', onPointerLeave as EventListener);
-      document.body.addEventListener('click', onPointerClick as EventListener);
+    const elem = options.domElement;
+    // 仅在目标元素上绑定事件，避免影响页面其它输入控件
+    elem.addEventListener('pointermove', onPointerMove as EventListener);
+    elem.addEventListener('pointerleave', onPointerLeave as EventListener);
+    elem.addEventListener('click', onPointerClick as EventListener);
 
-      document.body.addEventListener('touchstart', onTouchStart as EventListener, { passive: false });
-      document.body.addEventListener('touchmove', onTouchMove as EventListener, { passive: false });
-      document.body.addEventListener('touchend', onTouchEnd as EventListener, { passive: false });
-      document.body.addEventListener('touchcancel', onTouchEnd as EventListener, { passive: false });
-      globalPointerActive = true;
-    }
+    elem.addEventListener('touchstart', onTouchStart as EventListener, { passive: false });
+    elem.addEventListener('touchmove', onTouchMove as EventListener, { passive: false });
+    elem.addEventListener('touchend', onTouchEnd as EventListener, { passive: false });
+    elem.addEventListener('touchcancel', onTouchEnd as EventListener, { passive: false });
   }
   defaultData.dispose = () => {
     pointerMap.delete(options.domElement);
-    if (pointerMap.size === 0) {
-      document.body.removeEventListener('pointermove', onPointerMove as EventListener);
-      document.body.removeEventListener('pointerleave', onPointerLeave as EventListener);
-      document.body.removeEventListener('click', onPointerClick as EventListener);
+    const elem = options.domElement;
+    elem.removeEventListener('pointermove', onPointerMove as EventListener);
+    elem.removeEventListener('pointerleave', onPointerLeave as EventListener);
+    elem.removeEventListener('click', onPointerClick as EventListener);
 
-      document.body.removeEventListener('touchstart', onTouchStart as EventListener);
-      document.body.removeEventListener('touchmove', onTouchMove as EventListener);
-      document.body.removeEventListener('touchend', onTouchEnd as EventListener);
-      document.body.removeEventListener('touchcancel', onTouchEnd as EventListener);
-      globalPointerActive = false;
-    }
+    elem.removeEventListener('touchstart', onTouchStart as EventListener);
+    elem.removeEventListener('touchmove', onTouchMove as EventListener);
+    elem.removeEventListener('touchend', onTouchEnd as EventListener);
+    elem.removeEventListener('touchcancel', onTouchEnd as EventListener);
   };
   return defaultData;
 }
@@ -794,24 +799,29 @@ function createBallpit(canvas: HTMLCanvasElement, config: any = {}): CreateBallp
   const plane = new Plane(new Vector3(0, 0, 1), 0);
   const intersectionPoint = new Vector3();
   let isPaused = false;
+  // 交互开关：当 interactive=false 时，不绑定全局事件，避免阻塞表单输入
+  const interactiveFlag = config.interactive !== undefined ? config.interactive : true;
+  let pointerData: PointerData | null = null;
+  if (interactiveFlag) {
+    canvas.style.touchAction = 'none';
+    canvas.style.userSelect = 'none';
+    (canvas.style as any).webkitUserSelect = 'none';
 
-  canvas.style.touchAction = 'none';
-  canvas.style.userSelect = 'none';
-  (canvas.style as any).webkitUserSelect = 'none';
-
-  const pointerData = createPointerData({
-    domElement: canvas,
-    onMove() {
-      raycaster.setFromCamera(pointerData.nPosition, threeInstance.camera);
-      threeInstance.camera.getWorldDirection(plane.normal);
-      raycaster.ray.intersectPlane(plane, intersectionPoint);
-      spheres.physics.center.copy(intersectionPoint);
-      spheres.config.controlSphere0 = true;
-    },
-    onLeave() {
-      spheres.config.controlSphere0 = false;
-    }
-  });
+    pointerData = createPointerData({
+      domElement: canvas,
+      onMove() {
+        // 使用指针坐标更新物理中心
+        raycaster.setFromCamera(pointerData!.nPosition, threeInstance.camera);
+        threeInstance.camera.getWorldDirection(plane.normal);
+        raycaster.ray.intersectPlane(plane, intersectionPoint);
+        spheres.physics.center.copy(intersectionPoint);
+        spheres.config.controlSphere0 = true;
+      },
+      onLeave() {
+        spheres.config.controlSphere0 = false;
+      }
+    });
+  }
   function initialize(cfg: any) {
     if (spheres) {
       threeInstance.clear();
@@ -839,19 +849,33 @@ function createBallpit(canvas: HTMLCanvasElement, config: any = {}): CreateBallp
       isPaused = !isPaused;
     },
     dispose() {
-      pointerData.dispose?.();
+      pointerData?.dispose?.();
       threeInstance.dispose();
     }
   };
 }
 
+/**
+ * BallpitProps
+ * 描述 Ballpit 组件的参数。
+ * - className: 组件外层样式类名
+ * - followCursor: 是否跟随指针移动
+ * - interactive: 是否开启交互（触摸/点击）。为 false 时不绑定全局事件，避免阻塞输入框交互
+ */
 interface BallpitProps {
   className?: string;
   followCursor?: boolean;
+  interactive?: boolean;
   [key: string]: any;
 }
 
-const Ballpit: React.FC<BallpitProps> = ({ className = '', followCursor = false, ...props }) => {
+/**
+ * Ballpit 组件
+ * 渲染背景 3D 小球场景。
+ * 参数: className, followCursor, interactive
+ * 返回值: React canvas 元素
+ */
+const Ballpit: React.FC<BallpitProps> = ({ className = '', followCursor = false, interactive = true, ...props }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const spheresInstanceRef = useRef<CreateBallpitReturn | null>(null);
 
@@ -861,6 +885,7 @@ const Ballpit: React.FC<BallpitProps> = ({ className = '', followCursor = false,
 
     spheresInstanceRef.current = createBallpit(canvas, {
       followCursor,
+      interactive,
       ...props
     });
 
@@ -872,7 +897,8 @@ const Ballpit: React.FC<BallpitProps> = ({ className = '', followCursor = false,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <canvas className={className} ref={canvasRef} style={{ width: '100%', height: '100%', pointerEvents: 'none' }} />;
+  // 恢复 canvas 的指针事件，便于操控小球；输入框在上层（更高 z-index），不会被遮挡
+  return <canvas className={className} ref={canvasRef} style={{ width: '100%', height: '100%' }} />;
 };
 
 export default Ballpit;
