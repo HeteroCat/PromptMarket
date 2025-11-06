@@ -1,38 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Search, ShoppingBag, GraduationCap, DollarSign, Image, Video, ArrowRight, Sparkles } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ShoppingBag, GraduationCap, DollarSign, Image, Video, ArrowRight, Sparkles } from 'lucide-react';
 import Layout from '../components/Layout';
 import PromptGrid from '../components/PromptGrid';
-import SearchBar, { SearchFilters } from '../components/SearchBar';
 import { usePrompts } from '../contexts/PromptContext';
 
 const Home: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const { prompts, loading, error, searchPrompts, fetchPrompts, fetchFeaturedPrompts } = usePrompts();
-  const [isSearchMode, setIsSearchMode] = useState(false);
+  const { prompts, loading, error, fetchFeaturedPrompts } = usePrompts();
 
   useEffect(() => {
     // 获取精选提示词（限制数量）
-    if (searchParams.get('search')) {
-      // 如果有搜索参数，使用搜索功能
-      setIsSearchMode(true);
-      searchPrompts(searchParams.get('search') || '', {});
-    } else {
-      // 否则获取精选提示词
-      setIsSearchMode(false);
-      fetchFeaturedPrompts(6);
-    }
-  }, [fetchFeaturedPrompts, searchPrompts, searchParams]);
-
-  const handleSearch = (query: string, filters: SearchFilters) => {
-    if (query.trim() || Object.values(filters).some(v => v && v !== '')) {
-      setIsSearchMode(true);
-      searchPrompts(query, filters);
-    } else {
-      setIsSearchMode(false);
-      fetchFeaturedPrompts(6);
-    }
-  };
+    fetchFeaturedPrompts(6);
+  }, [fetchFeaturedPrompts]);
 
   const categories = [
     {
@@ -110,14 +89,7 @@ const Home: React.FC = () => {
             为电商、金融、教育工作者提供专业的提示词资源，提升AI使用效率和创作质量
           </p>
 
-          {/* Search Bar */}
-          <div className="max-w-4xl mx-auto mb-8">
-            <SearchBar
-              onSearch={handleSearch}
-              placeholder="搜索提示词、分类或关键词..."
-              showFilters={true}
-            />
-          </div>
+
         </div>
       </section>
 
@@ -173,25 +145,20 @@ const Home: React.FC = () => {
           <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-3xl font-bold text-white mb-4">
-                {isSearchMode ? '搜索结果' : '精选提示词'}
+                精选提示词
               </h2>
               <p className="text-gray-400 text-lg">
-                {isSearchMode 
-                  ? `找到 ${prompts.length} 个相关提示词`
-                  : '发现热门和推荐的高质量提示词模板'
-                }
+                发现热门和推荐的高质量提示词模板
               </p>
             </div>
             
-            {!isSearchMode && (
-              <Link
-                to="/ecommerce"
-                className="hidden sm:flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors"
-              >
-                <span>查看全部</span>
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            )}
+            <Link
+              to="/ecommerce"
+              className="hidden sm:flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors"
+            >
+              <span>查看全部</span>
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
           </div>
 
           <PromptGrid 
@@ -200,15 +167,11 @@ const Home: React.FC = () => {
             error={error}
             showAuthor={true}
             onRetry={() => {
-              if (isSearchMode) {
-                searchPrompts(searchParams.get('search') || '', {});
-              } else {
-                fetchFeaturedPrompts(6);
-              }
+              fetchFeaturedPrompts(6);
             }}
           />
 
-          {!loading && prompts.length > 0 && !isSearchMode && (
+          {!loading && prompts.length > 0 && (
             <div className="text-center mt-12">
               <Link
                 to="/ecommerce"

@@ -488,7 +488,8 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       let supabaseQuery = supabase
         .from('prompts')
         .select('*')
-        .eq('is_public', true);
+        .eq('is_public', true)
+        .eq('is_featured', true);
 
       // 搜索查询
       if (query) {
