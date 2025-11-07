@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User, LogOut, Menu, X, Plus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import Like from './Like';
+
+/**
+ * 文件说明：导航栏组件（Navbar）
+ * 功能：提供站点导航、用户菜单（个人主页、创建提示词、退出登录），未登录时显示登录/注册按钮，并在登录左侧集成点赞入口。
+ */
 
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -9,7 +15,13 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleSignOut = async () => {
+  /**
+   * 退出登录处理函数
+   * 参数：无
+   * 返回值：Promise<void>
+   * 异常：无显式抛出；如有错误由上层上下文处理
+   */
+  const handleSignOut = async (): Promise<void> => {
     await signOut();
     navigate('/');
   };
@@ -93,6 +105,7 @@ const Navbar: React.FC = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
+                <Like />
                 <Link
                   to="/login"
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
